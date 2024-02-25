@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Juego de Preguntas y Respuestas</title>
+<title>Juego de Quiz</title>
 <style>
   /* Estilos CSS */
   body {
@@ -15,76 +15,99 @@
     margin: 0;
     background-color: #f5f5f5;
   }
-  #game-container {
+  .container {
     width: 400px;
     padding: 20px;
     border-radius: 10px;
     text-align: center;
     background-color: #fff;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    position: relative;
   }
-  #question-container {
-    background-color: #ffcc00; /* Color amarillo */
-    color: #fff; /* Texto blanco */
+  .question-container {
+    background-color: #ffcc00; /* Color llamativo */
     padding: 15px;
     border-radius: 10px;
     margin-bottom: 20px;
   }
-  #question {
+  .question {
     font-size: 20px;
     margin-bottom: 20px;
   }
-  #options {
+  .options {
     list-style-type: none;
     padding: 0;
   }
-  .option-container {
+  .option {
     margin-bottom: 10px;
     cursor: pointer;
-  }
-  .option-container label {
-    display: block;
+    background-color: #eaeaea;
     padding: 10px 20px;
     border-radius: 5px;
-    background-color: #eaeaea;
-    color: #000; /* Texto negro */
   }
-  .correct label {
-    background-color: #006600 !important; /* Verde oscuro */
-    color: #fff; /* Texto blanco */
+  .result-container {
+    display: none;
   }
-  .incorrect label {
-    background-color: #cc0000 !important; /* Rojo oscuro */
-    color: #fff; /* Texto blanco */
-  }
-  .option-container.correct label:hover {
-    background-color: #006600 !important; /* Verde oscuro */
-  }
-  .option-container.incorrect label:hover {
-    background-color: #cc0000 !important; /* Rojo oscuro */
-  }
-  #status-container {
-    margin-top: 20px;
+  #timer-container {
+    background-color: #ffcc00; /* Color llamativo */
     padding: 10px;
-    border: 2px solid #333;
     border-radius: 5px;
-    background-color: #f9f9f9;
+    margin-bottom: 10px;
+  }
+  #timer {
+    font-weight: bold;
+    color: red; /* Color llamativo para el temporizador */
+    font-size: 20px;
+  }
+  #question-info {
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 10px;
+    font-size: 14px;
+    background-color: #4CAF50; /* Color llamativo para la caja */
+    color: white; /* Color de texto para la caja */
+    border-top-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+  }
+  #question-info span {
+    font-weight: bold;
+  }
+  #start-button {
+    background-color: #ffcc00;
+    border: none;
+    border-radius: 5px;
+    padding: 12px 24px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
   }
 </style>
 </head>
 <body>
-<div id="game-container">
-  <h1>Juego de Preguntas y Respuestas</h1>
-  <div id="question-container">
-    <div id="question"></div>
+<div class="container" id="game-container">
+  <div id="question-info">Preguntas: <span id="total-questions">0</span> - Contestadas: <span id="answered-questions">0</span></div>
+  <h1>Juego de Quiz</h1>
+  <div class="question-container">
+    <div class="question" id="question"></div>
   </div>
-  <ul id="options"></ul>
-  <div id="status-container">
-    <p>Preguntas restantes: <span id="remaining"></span></p>
-    <p>Respuestas correctas: <span id="correct"></span></p>
-    <p>Respuestas incorrectas: <span id="incorrect"></span></p>
-  </div>
+  <div id="timer-container">Tiempo restante: <span id="timer">10s</span></div>
+  <ul class="options" id="options"></ul>
 </div>
+<div class="result-container" id="result-container">
+  <h2>¡Fin del juego!</h2>
+  <div id="score-container">
+    <p>Preguntas correctas: <span id="correct-answers"></span></p>
+    <p>Preguntas incorrectas: <span id="incorrect-answers"></span></p>
+    <p>Porcentaje de respuestas correctas: <span id="percentage"></span>%</p>
+  </div>
+  <button id="restart-button" onclick="restartGame()">Volver a jugar</button>
+</div>
+<button id="start-button" onclick="startGame()">Iniciar Juego</button>
 
 <script>
   // JavaScript
@@ -98,76 +121,144 @@
       question: "¿Quién escribió 'Don Quijote de la Mancha'?",
       options: ["Miguel de Cervantes", "Federico García Lorca", "Gabriel García Márquez", "Pablo Neruda"],
       answer: "Miguel de Cervantes"
-    },
+    }
     // Agrega más preguntas aquí
   ];
 
   const questionDisplay = document.getElementById('question');
   const optionsDisplay = document.getElementById('options');
-  const remainingDisplay = document.getElementById('remaining');
-  const correctDisplay = document.getElementById('correct');
-  const incorrectDisplay = document.getElementById('incorrect');
+  const resultContainer = document.getElementById('result-container');
+  const correctAnswersDisplay = document.getElementById('correct-answers');
+  const incorrectAnswersDisplay = document.getElementById('incorrect-answers');
+  const percentageDisplay = document.getElementById('percentage');
+  const restartButton = document.getElementById('restart-button');
+  const currentQuestionDisplay = document.getElementById('answered-questions');
+  const totalQuestionsDisplay = document.getElementById('total-questions');
   let currentQuestionIndex = 0;
   let correctAnswers = 0;
   let incorrectAnswers = 0;
+  let answeredQuestions = 0;
+  let timer;
+
+  function startGame() {
+    document.getElementById('start-button').style.display = 'none'; // Ocultar botón de inicio
+    if (localStorage.getItem('currentQuestionIndex')) {
+      currentQuestionIndex = parseInt(localStorage.getItem('currentQuestionIndex'));
+      correctAnswers = parseInt(localStorage.getItem('correctAnswers'));
+      incorrectAnswers = parseInt(localStorage.getItem('incorrectAnswers'));
+      answeredQuestions = parseInt(localStorage.getItem('answeredQuestions'));
+    }
+    totalQuestionsDisplay.textContent = questions.length;
+    currentQuestionDisplay.textContent = answeredQuestions;
+    showQuestion(currentQuestionIndex); // Mostrar la pregunta en la que se quedó el jugador
+  }
 
   function showQuestion(index) {
+    clearInterval(timer); // Limpiar el temporizador anterior
     const currentQuestion = questions[index];
     questionDisplay.textContent = currentQuestion.question;
     optionsDisplay.innerHTML = "";
-    currentQuestion.options.forEach((option, i) => {
+    currentQuestion.options.forEach((option) => {
       const li = document.createElement('li');
-      const optionContainer = document.createElement('div');
-      optionContainer.classList.add('option-container');
-      const label = document.createElement('label');
-      label.textContent = option;
-      optionContainer.appendChild(label);
-      optionContainer.addEventListener('click', function() {
-        checkAnswer(option, i);
+      li.textContent = option;
+      li.classList.add('option');
+      li.addEventListener('click', function() {
+        checkAnswer(option, currentQuestion.answer);
       });
-      li.appendChild(optionContainer);
       optionsDisplay.appendChild(li);
     });
-    remainingDisplay.textContent = questions.length - index;
+    startTimer(); // Comenzar el temporizador para esta pregunta
   }
 
-  function checkAnswer(selectedAnswer, selectedIndex) {
+  function startTimer() {
+    let timeLeft = 10; // Tiempo en segundos para cada pregunta
+    updateTimer(timeLeft);
+    timer = setInterval(() => {
+      timeLeft--;
+      updateTimer(timeLeft);
+      if (timeLeft === 0) {
+        clearInterval(timer);
+        timeIsUp();
+      }
+    }, 1000); // Contar hacia abajo cada segundo
+  }
+
+  function timeIsUp() {
     const correctAnswer = questions[currentQuestionIndex].answer;
-    const options = document.getElementsByClassName('option-container');
-    const correctIndex = questions[currentQuestionIndex].options.indexOf(correctAnswer);
-    
+    const options = optionsDisplay.getElementsByTagName('li');
+    for (let option of options) {
+      option.removeEventListener('click', checkAnswer);
+      if (option.textContent === correctAnswer) {
+        option.style.backgroundColor = '#4CAF50'; // Marcar la respuesta correcta en verde
+      }
+    }
+    incorrectAnswers++; // Contar como respuesta incorrecta
+    setTimeout(function() {
+      currentQuestionIndex++;
+      if (currentQuestionIndex < questions.length) {
+        showQuestion(currentQuestionIndex);
+      } else {
+        showResult();
+      }
+    }, 2000); // Retraso de 2 segundos antes de pasar a la siguiente pregunta
+  }
+
+  function updateTimer(timeLeft) {
+    document.getElementById('timer').textContent = `${timeLeft}s`;
+  }
+
+  function checkAnswer(selectedAnswer, correctAnswer) {
+    const options = optionsDisplay.getElementsByTagName('li');
+    for (let option of options) {
+      option.removeEventListener('click', checkAnswer);
+      if (option.textContent === correctAnswer) {
+        option.style.backgroundColor = '#4CAF50'; // Verde para la respuesta correcta
+      } else if (option.textContent === selectedAnswer) {
+        option.style.backgroundColor = '#f44336'; // Rojo para la respuesta incorrecta
+      }
+    }
     if (selectedAnswer === correctAnswer) {
-      options[selectedIndex].classList.add('correct');
-      options[selectedIndex].querySelector('label').style.color = '#fff'; // Cambiar color de texto a blanco
       correctAnswers++;
     } else {
-      options[selectedIndex].classList.add('incorrect');
-      options[selectedIndex].querySelector('label').style.color = '#fff'; // Cambiar color de texto a blanco
-      options[correctIndex].classList.add('correct');
-      options[correctIndex].querySelector('label').style.color = '#fff'; // Cambiar color de texto a blanco
-      options[correctIndex].classList.remove('incorrect');
       incorrectAnswers++;
-      alert("Respuesta incorrecta. La respuesta correcta es: " + correctAnswer);
     }
-
-    currentQuestionIndex++;
-    if (currentQuestionIndex < questions.length) {
-      showQuestion(currentQuestionIndex);
-    } else {
-      updateStatus();
-    }
-
-    correctDisplay.textContent = correctAnswers;
-    incorrectDisplay.textContent = incorrectAnswers;
+    clearInterval(timer); // Detener el temporizador cuando se selecciona una respuesta
+    answeredQuestions++;
+    localStorage.setItem('answeredQuestions', answeredQuestions);
+    localStorage.setItem('currentQuestionIndex', currentQuestionIndex);
+    localStorage.setItem('correctAnswers', correctAnswers);
+    localStorage.setItem('incorrectAnswers', incorrectAnswers);
+    setTimeout(function() {
+      currentQuestionIndex++;
+      if (currentQuestionIndex < questions.length) {
+        showQuestion(currentQuestionIndex);
+      } else {
+        showResult();
+      }
+    }, 2000); // Retraso de 2 segundos antes de pasar a la siguiente pregunta
   }
 
-  function updateStatus() {
-    questionDisplay.textContent = "¡Fin del juego!";
-    optionsDisplay.innerHTML = "";
-    remainingDisplay.textContent = 0;
+  function showResult() {
+    resultContainer.style.display = "block";
+    const totalQuestions = correctAnswers + incorrectAnswers;
+    const percentage = (correctAnswers / totalQuestions) * 100;
+    correctAnswersDisplay.textContent = correctAnswers;
+    incorrectAnswersDisplay.textContent = incorrectAnswers;
+    percentageDisplay.textContent = percentage.toFixed(2);
+    document.getElementById('game-container').style.display = 'none'; // Ocultar la sección de juego
   }
 
-  showQuestion(currentQuestionIndex);
+  function restartGame() {
+    currentQuestionIndex = 0;
+    correctAnswers = 0;
+    incorrectAnswers = 0;
+    answeredQuestions = 0;
+    localStorage.clear(); // Limpiar el almacenamiento local al reiniciar el juego
+    resultContainer.style.display = "none";
+    document.getElementById('game-container').style.display = 'block'; // Mostrar la sección de juego
+    currentQuestionDisplay.textContent = answeredQuestions;
+    showQuestion(currentQuestionIndex);
+  }
 </script>
 </body>
 </html>
