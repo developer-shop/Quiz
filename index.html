@@ -193,6 +193,8 @@
       }
     }
     incorrectAnswers++; // Contar como respuesta incorrecta
+    answeredQuestions++;
+    localStorage.setItem('answeredQuestions', answeredQuestions);
     setTimeout(function() {
       currentQuestionIndex++;
       if (currentQuestionIndex < questions.length) {
