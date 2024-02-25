@@ -1,25 +1,173 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Juego de Preguntas y Respuestas</title>
-    <link rel="stylesheet" href="styles.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Juego de Preguntas y Respuestas</title>
+<style>
+  /* Estilos CSS */
+  body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #f5f5f5;
+  }
+  #game-container {
+    width: 400px;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  #question-container {
+    background-color: #ffcc00; /* Color amarillo */
+    color: #fff; /* Texto blanco */
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+  }
+  #question {
+    font-size: 20px;
+    margin-bottom: 20px;
+  }
+  #options {
+    list-style-type: none;
+    padding: 0;
+  }
+  .option-container {
+    margin-bottom: 10px;
+    cursor: pointer;
+  }
+  .option-container label {
+    display: block;
+    padding: 10px 20px;
+    border-radius: 5px;
+    background-color: #eaeaea;
+    color: #000; /* Texto negro */
+  }
+  .correct label {
+    background-color: #006600 !important; /* Verde oscuro */
+    color: #fff; /* Texto blanco */
+  }
+  .incorrect label {
+    background-color: #cc0000 !important; /* Rojo oscuro */
+    color: #fff; /* Texto blanco */
+  }
+  .option-container.correct label:hover {
+    background-color: #006600 !important; /* Verde oscuro */
+  }
+  .option-container.incorrect label:hover {
+    background-color: #cc0000 !important; /* Rojo oscuro */
+  }
+  #status-container {
+    margin-top: 20px;
+    padding: 10px;
+    border: 2px solid #333;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+  }
+</style>
 </head>
 <body>
-    <div class="container">
-        <h1>Juego de Preguntas y Respuestas</h1>
-        <div id="question-container">
-            <p id="question">¿Cuál es la capital de Francia?</p>
-            <div id="options">
-                <button onclick="checkAnswer(this)">Madrid</button>
-                <button onclick="checkAnswer(this)">París</button>
-                <button onclick="checkAnswer(this)">Londres</button>
-                <button onclick="checkAnswer(this)">Berlín</button>
-            </div>
-        </div>
-        <div id="result"></div>
-    </div>
-    <script src="script.js"></script>
+<div id="game-container">
+  <h1>Juego de Preguntas y Respuestas</h1>
+  <div id="question-container">
+    <div id="question"></div>
+  </div>
+  <ul id="options"></ul>
+  <div id="status-container">
+    <p>Preguntas restantes: <span id="remaining"></span></p>
+    <p>Respuestas correctas: <span id="correct"></span></p>
+    <p>Respuestas incorrectas: <span id="incorrect"></span></p>
+  </div>
+</div>
+
+<script>
+  // JavaScript
+  const questions = [
+    {
+      question: "¿Cuál es la capital de Francia?",
+      options: ["Madrid", "Roma", "París", "Berlín"],
+      answer: "París"
+    },
+    {
+      question: "¿Quién escribió 'Don Quijote de la Mancha'?",
+      options: ["Miguel de Cervantes", "Federico García Lorca", "Gabriel García Márquez", "Pablo Neruda"],
+      answer: "Miguel de Cervantes"
+    },
+    // Agrega más preguntas aquí
+  ];
+
+  const questionDisplay = document.getElementById('question');
+  const optionsDisplay = document.getElementById('options');
+  const remainingDisplay = document.getElementById('remaining');
+  const correctDisplay = document.getElementById('correct');
+  const incorrectDisplay = document.getElementById('incorrect');
+  let currentQuestionIndex = 0;
+  let correctAnswers = 0;
+  let incorrectAnswers = 0;
+
+  function showQuestion(index) {
+    const currentQuestion = questions[index];
+    questionDisplay.textContent = currentQuestion.question;
+    optionsDisplay.innerHTML = "";
+    currentQuestion.options.forEach((option, i) => {
+      const li = document.createElement('li');
+      const optionContainer = document.createElement('div');
+      optionContainer.classList.add('option-container');
+      const label = document.createElement('label');
+      label.textContent = option;
+      optionContainer.appendChild(label);
+      optionContainer.addEventListener('click', function() {
+        checkAnswer(option, i);
+      });
+      li.appendChild(optionContainer);
+      optionsDisplay.appendChild(li);
+    });
+    remainingDisplay.textContent = questions.length - index;
+  }
+
+  function checkAnswer(selectedAnswer, selectedIndex) {
+    const correctAnswer = questions[currentQuestionIndex].answer;
+    const options = document.getElementsByClassName('option-container');
+    const correctIndex = questions[currentQuestionIndex].options.indexOf(correctAnswer);
+    
+    if (selectedAnswer === correctAnswer) {
+      options[selectedIndex].classList.add('correct');
+      options[selectedIndex].querySelector('label').style.color = '#fff'; // Cambiar color de texto a blanco
+      correctAnswers++;
+    } else {
+      options[selectedIndex].classList.add('incorrect');
+      options[selectedIndex].querySelector('label').style.color = '#fff'; // Cambiar color de texto a blanco
+      options[correctIndex].classList.add('correct');
+      options[correctIndex].querySelector('label').style.color = '#fff'; // Cambiar color de texto a blanco
+      options[correctIndex].classList.remove('incorrect');
+      incorrectAnswers++;
+      alert("Respuesta incorrecta. La respuesta correcta es: " + correctAnswer);
+    }
+
+    currentQuestionIndex++;
+    if (currentQuestionIndex < questions.length) {
+      showQuestion(currentQuestionIndex);
+    } else {
+      updateStatus();
+    }
+
+    correctDisplay.textContent = correctAnswers;
+    incorrectDisplay.textContent = incorrectAnswers;
+  }
+
+  function updateStatus() {
+    questionDisplay.textContent = "¡Fin del juego!";
+    optionsDisplay.innerHTML = "";
+    remainingDisplay.textContent = 0;
+  }
+
+  showQuestion(currentQuestionIndex);
+</script>
 </body>
 </html>
