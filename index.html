@@ -142,13 +142,13 @@
 
   function startGame() {
     document.getElementById('start-button').style.display = 'none'; // Ocultar botón de inicio
+    totalQuestionsDisplay.textContent = questions.length;
     if (localStorage.getItem('currentQuestionIndex')) {
       currentQuestionIndex = parseInt(localStorage.getItem('currentQuestionIndex'));
       correctAnswers = parseInt(localStorage.getItem('correctAnswers'));
       incorrectAnswers = parseInt(localStorage.getItem('incorrectAnswers'));
       answeredQuestions = parseInt(localStorage.getItem('answeredQuestions'));
     }
-    totalQuestionsDisplay.textContent = questions.length;
     currentQuestionDisplay.textContent = answeredQuestions;
     showQuestion(currentQuestionIndex); // Mostrar la pregunta en la que se quedó el jugador
   }
