@@ -1,3 +1,3 @@
-# Quiz
+# tienda virtual
 
-juegos de preguntas y respuestas 
+tienda virtual
