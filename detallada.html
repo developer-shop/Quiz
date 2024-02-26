@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tienda Virtual</title>
+    <title>Detalles del Producto - Producto 1</title>
     <style>
         /* Estilos para la cabecera */
         header {
@@ -35,38 +35,35 @@
             text-decoration: none;
         }
 
-        /* Estilos para la sección de productos */
-        .products {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
+        /* Estilos para la sección de detalles del producto */
+        .product-details {
+            max-width: 800px;
+            margin: 0 auto;
             padding: 20px;
         }
 
-        .product {
-            width: 300px;
-            margin: 20px;
-            padding: 20px;
-            border: 1px solid #ccc;
+        .product-image {
             text-align: center;
         }
 
-        .product img {
-            width: 100%; /* Establece el ancho al 100% del contenedor */
-            max-height: 120px; /* Establece la altura máxima a 120px */
-            object-fit: cover; /* Escala la imagen para llenar el contenedor */
-            margin-bottom: 10px;
+        .product-image img {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 20px;
         }
 
-        .product h3 {
-            margin-top: 0;
+        .product-description {
+            text-align: justify;
+            margin-bottom: 20px;
         }
 
-        .product p {
-            margin-bottom: 10px;
+        .product-price {
+            font-weight: bold;
+            font-size: 1.2em;
+            margin-bottom: 20px;
         }
 
-        .product button {
+        .product-button {
             background-color: #333;
             color: #fff;
             border: none;
@@ -77,7 +74,7 @@
 </head>
 <body style="font-family: Arial, sans-serif; margin: 0; padding: 0;">
     <header>
-        <h1>Tienda Virtual</h1>
+        <h1>Detalles del Producto - Producto 1</h1>
         <nav>
             <ul>
                 <li><a href="#">Inicio</a></li>
@@ -88,28 +85,17 @@
         </nav>
     </header>
 
-    <div class="products">
-        <div class="product">
+    <div class="product-details">
+        <div class="product-image">
             <img src="https://i.ibb.co/yVKJ5gj/20230731-202554.jpg" alt="Producto 1">
-            <h3>Producto 1</h3>
-            <p>Descripción del producto 1.</p>
-            <p>Precio: $100</p>
-            <button>Agregar al carrito</button>
         </div>
-        <div class="product">
-            <img src="https://i.ibb.co/yVKJ5gj/20230731-202554.jpg" alt="Producto 2">
-            <h3>Producto 2</h3>
-            <p>Descripción del producto 2.</p>
-            <p>Precio: $120</p>
-            <button>Agregar al carrito</button>
+        <div class="product-description">
+            <p>Descripción detallada del Producto 1. Esta sección puede contener información detallada sobre el producto, como características, materiales, dimensiones, etc.</p>
         </div>
-        <div class="product">
-            <img src="https://i.ibb.co/yVKJ5gj/20230731-202554.jpg" alt="Producto 3">
-            <h3>Producto 3</h3>
-            <p>Descripción del producto 3.</p>
-            <p>Precio: $80</p>
-            <button>Agregar al carrito</button>
+        <div class="product-price">
+            Precio: $100
         </div>
+        <button class="product-button">Agregar al carrito</button>
     </div>
 
     <footer style="background-color: #333; color: #fff; text-align: center; padding: 10px 0;">
