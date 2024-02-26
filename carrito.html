@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tienda Virtual - Carrito de Compras</title>
+    <style>
+        /* Estilos para la cabecera y navegación (repetidos) */
+
+        /* Estilos para la sección de carrito de compras */
+        .cart-container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .cart-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        .cart-table th, .cart-table td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+        }
+
+        .cart-total {
+            font-weight: bold;
+            text-align: right;
+        }
+
+        .cart-actions {
+            text-align: right;
+        }
+
+        .cart-actions button {
+            background-color: #333;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            margin-left: 10px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body style="font-family: Arial, sans-serif; margin: 0; padding: 0;">
+    <header>
+        <!-- Cabecera y navegación (repetidos) -->
+    </header>
+
+    <div class="cart-container">
+        <h2>Carrito de Compras</h2>
+        <table class="cart-table">
+            <thead>
+                <tr>
+                    <th>Producto</th>
+                    <th>Cantidad</th>
+                    <th>Precio Unitario</th>
+                    <th>Total</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Aquí puedes generar dinámicamente las filas de la tabla con JavaScript -->
+                <tr>
+                    <td>Producto 1</td>
+                    <td>1</td>
+                    <td>$100</td>
+                    <td>$100</td>
+                    <td><button>Eliminar</button></td>
+                </tr>
+                <tr>
+                    <td>Producto 2</td>
+                    <td>2</td>
+                    <td>$120</td>
+                    <td>$240</td>
+                    <td><button>Eliminar</button></td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="cart-total">
+            Total: $340
+        </div>
+        <div class="cart-actions">
+            <button>Actualizar Carrito</button>
+            <button>Vaciar Carrito</button>
+            <button>Proceder al Pago</button>
+        </div>
+    </div>
+
+    <footer>
+        <!-- Pie de página (repetido) -->
+    </footer>
+</body>
+</html>
