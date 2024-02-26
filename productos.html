@@ -94,7 +94,7 @@
             <h3>Producto 1</h3>
             <p>Descripción del producto 1.</p>
             <p>Precio: $100</p>
-            <button><a href-"https://wa.me/573155445183?Hola%20me%20interesa%20este%20articulo">Comprar</a></button>
+            <button><a href="https://wa.me/573155445183?Hola%20me%20interesa%20este%20articulo">Comprar</a></button>
         </div>
         <div class="product">
             <img src="https://i.ibb.co/yVKJ5gj/20230731-202554.jpg" alt="Producto 2">
@@ -115,30 +115,6 @@
     <footer style="background-color: #333; color: #fff; text-align: center; padding: 10px 0;">
         <p>© 2024 Tienda Virtual</p>
     </footer>
-
-    <javascript>
-
-        // Obtener referencia al botón "Añadir al carrito"
-const addToCartBtn = document.querySelector('.add-to-cart-btn');
-
-// Escuchar el evento de clic en el botón "Añadir al carrito"
-addToCartBtn.addEventListener('click', function() {
-    // Obtener el ID del producto del atributo de datos
-    const productId = addToCartBtn.dataset.productId;
-
-    // Lógica para agregar el producto al carrito
-    agregarAlCarrito(productId);
-});
-
-// Función para agregar un producto al carrito
-function agregarAlCarrito(productId) {
-    // Lógica para agregar el producto al carrito, por ejemplo:
-    // - Obtener el producto con el ID correspondiente de una base de datos o un arreglo
-    // - Agregar el producto al carrito (por ejemplo, a un arreglo o un objeto)
-    // - Actualizar la interfaz de usuario para reflejar los cambios en el carrito
-    console.log('Producto agregado al carrito con ID:', productId);
-}
-
-    </javascript>
+    
 </body>
 </html>
