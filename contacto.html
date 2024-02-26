@@ -40,8 +40,6 @@
             text-decoration: none;
         }
 
-        
-
         main {
             padding: 20px;
         }
@@ -84,7 +82,7 @@
             <ul>
                 <li><a href="index.html">Inicio</a></li>
                 <li><a href="productos.html">Productos</a></li>
-                <li><a href="carrito.html">Carrito</a></li>
+                <li><a href="catalogo.html">Catalogo</a></li>
                 <li><a href="contacto.html">Contacto</a></li>
             </ul>
         </nav>
@@ -92,20 +90,21 @@
 
     <main>
         <h2>¡Contáctanos!</h2>
-        <p>Completa el siguiente formulario para ponerte en contacto con nosotros:</p>
-        <form id="contactForm">
-            <label for="name">Nombre:</label>
-            <input type="text" id="name" name="name" required>
-            <label for="email">Correo electrónico:</label>
-            <input type="email" id="email" name="email" required>
-            <label for="message">Mensaje:</label>
-            <textarea id="message" name="message" required></textarea>
-            <button type="submit">Enviar</button>
-        </form>
+        <p>Si estás interesado en un producto, puedes contactarnos directamente en WhatsApp:</p>
+        <button onclick="enviarMensajeWhatsApp()">Enviar mensaje en WhatsApp</button>
     </main>
 
     <footer>
         <p>© 2024 Tienda Virtual</p>
     </footer>
+
+    <script>
+        function enviarMensajeWhatsApp() {
+            var enlaceWhatsApp = "https://wa.me/573155445183?text=Me%20interesa%20este%20producto";
+
+            // Abrir WhatsApp en una nueva ventana o pestaña
+            window.open(enlaceWhatsApp);
+        }
+    </script>
 </body>
 </html>
