@@ -15,6 +15,7 @@
             background-color: #f9f9f9;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            overflow-x: auto; /* Agregar desplazamiento horizontal en dispositivos pequeños */
         }
 
         .cart-table {
@@ -32,6 +33,7 @@
         .cart-total {
             font-weight: bold;
             text-align: right;
+            margin-bottom: 20px;
         }
 
         .cart-actions {
@@ -45,6 +47,17 @@
             padding: 10px 20px;
             margin-left: 10px;
             cursor: pointer;
+        }
+
+        /* Estilos para hacer que la tabla sea más adaptable */
+        @media screen and (max-width: 600px) {
+            .cart-table {
+                font-size: 14px;
+            }
+
+            .cart-table th, .cart-table td {
+                padding: 8px;
+            }
         }
     </style>
 </head>
